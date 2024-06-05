@@ -11,16 +11,24 @@
         <h1>Welcome to Your Dashboard</h1>
         <nav>
             <ul>
-                <li><a href="/leaderboard">Leaderboard</a></li>
-                <li><a href="/course-content">Course Content</a></li>
+                <li><a href="leader-board.html">Leaderboard</a></li>
+                <li><a href="course-content.html">Course Content</a></li>
                 <!-- Add more navigation links as needed -->
             </ul>
         </nav>
     </header>
     <main>
         <section class="welcome-message">
-            <h2>Hello, <span id="user-fullname"></span>!</h2>
+            <h2>Hello <span id="user-fullname"></span></h2>
             <p>Welcome to your personalized dashboard.</p>
+        </section>
+        <h2>CHOOSE COUSRE</h2>
+        <section id="select-course">
+            <ul>
+                <li><a href="/select-course?course=html">Introduction to HTML</a></li>
+                <li><a href="/select-course?course=css">CSS Fundamentals</a></li>
+                <li><a href="/select-course?course=javascript">JavaScript Basics</a></li>
+            </ul>
         </section>
     </main>
     <footer>

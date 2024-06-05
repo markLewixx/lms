@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const email = formData.get('email');
         const full_name = formData.get('full_name');
         try {
-            const response = await fetch('/register', {
+            const  response = await fetch('/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -43,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ username, password })
             });
             if (response.ok) {
+                window.location.assign("dashboard.html")
                 alert('Login successful');
+                
             } else {
                 alert('Invalid username or password');
             }
@@ -60,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             if (response.ok) {
                 alert('Logout successful');
+                window.location.assign("index.html");
             } else {
                 alert('Logout failed');
             }
