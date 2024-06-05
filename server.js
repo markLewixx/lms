@@ -3,9 +3,12 @@ const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const dotenv = require('dotenv');
+const cors = require('cors');
 const { check, validationResult } = require('express-validator');
 const app = express();
+dotenv.config();
 
 // Configure session middleware
 app.use(session({
@@ -16,10 +19,11 @@ app.use(session({
 
 // Create MySQL connection
 const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'learning_management'
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE,
+    port:process.env.DB_PORT
 });
 
 // Connect to MySQL
@@ -39,6 +43,19 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+const authenticateUser = (req, res, next) => {
+   req.session.userId = userId; 
+    next();
+};
+
+app.post('/login', authenticateUser, (req, res) => {
+  
+});
+
+app.post('/register', authenticateUser, (req, res) => {
+ 
+});
 
 // Define routes
 app.get('/', (req, res) => {
@@ -152,7 +169,7 @@ app.get('/dashboard', (req, res) => {
 app.get('/course/:id', (req, res) => {
     const courseId = req.params.id;
     const sql = 'SELECT * FROM courses WHERE id = ?';
-    db.query(sql, [courseId], (err, result) => {
+    connection.query(sql, [courseId], (err, result) => {
       if (err) {
         throw err;
       }
@@ -161,6 +178,27 @@ app.get('/course/:id', (req, res) => {
     });
   });
 
+// Route to display courses selection page
+app.get('/courses', (req, res) => {
+    res.sendFile(__dirname + '/courses.html');
+});
+
+// Route to select a course
+app.get('/select-course', (req, res) => {
+    const selectedCourse = req.query.course;
+    req.session.selectedCourse = selectedCourse;
+    res.redirect('/selected-course');
+});
+
+// Route to display the selected course
+app.get('/selected-course', (req, res) => {
+    const selectedCourse = req.session.selectedCourse;
+    if (!selectedCourse) {
+        res.send('No course selected.');
+    } else {
+        res.send(`Selected course: ${selectedCourse}`);
+    }
+});
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
